@@ -1,11 +1,11 @@
 import io
-import json
 import os
 import traceback
 from flask import Flask, jsonify, request
-from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
+from google.auth.transport.requests import Request
 
 app = Flask(__name__)
 
@@ -13,15 +13,27 @@ SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 FOLDER_ID = os.environ.get("DRIVE_FOLDER_ID", "").strip()
 
 def get_drive_service():
-    raw = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
-    if not raw:
-        raise RuntimeError("GOOGLE_SERVICE_ACCOUNT_JSON não configurado")
+    client_id = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
+    client_secret = os.environ.get("GOOGLE_CLIENT_SECRET", "").strip()
+    refresh_token = os.environ.get("GOOGLE_REFRESH_TOKEN", "").strip()
 
-    info = json.loads(raw)
-    creds = service_account.Credentials.from_service_account_info(
-        info,
+    if not client_id:
+        raise RuntimeError("GOOGLE_CLIENT_ID não configurado")
+    if not client_secret:
+        raise RuntimeError("GOOGLE_CLIENT_SECRET não configurado")
+    if not refresh_token:
+        raise RuntimeError("GOOGLE_REFRESH_TOKEN não configurado")
+
+    creds = Credentials(
+        token=None,
+        refresh_token=refresh_token,
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=client_id,
+        client_secret=client_secret,
         scopes=SCOPES,
     )
+
+    creds.refresh(Request())
     return build("drive", "v3", credentials=creds)
 
 @app.route("/")
