@@ -6,8 +6,8 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 # Link do seu PC exposto pelo ngrok
-PC_UPLOAD_URL = "https://b4e7-179-48-36-29.ngrok-free.app/upload"
-PC_HEALTH_URL = "https://b4e7-179-48-36-29.ngrok-free.app/"
+PC_UPLOAD_URL = "https://5802-179-48-36-29.ngrok-free.app/upload"
+PC_HEALTH_URL = "https://5802-179-48-36-29.ngrok-free.app/"
 
 @app.route("/")
 def home():
