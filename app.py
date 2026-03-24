@@ -4,8 +4,8 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-PC_UPLOAD_URL = "https://e3aa-179-48-36-29.ngrok-free.app/upload"
-PC_HEALTH_URL = "https://e3aa-179-48-36-29.ngrok-free.app/"
+PC_UPLOAD_URL = "https://5230-179-48-36-29.ngrok-free.app/upload"
+PC_HEALTH_URL = "https://5230-179-48-36-29.ngrok-free.app/"
 
 @app.route("/")
 def home():
